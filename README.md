@@ -7,11 +7,12 @@
 ## Python Enviornment for LSS-test  
 > and here is where we save the mat0 and mat1:
 
-172.25.49.139:/DiffDomain/bin/diffdomains.py
+`172.25.49.139:/DiffDomain/bin/diffdomains.py`
 
-172.25.49.139:/DiffDomain/bin/comparedomains/domians.py
+`172.25.49.139:/DiffDomain/bin/comparedomains/domians.py`
 
-172.25.49.139:/DiffDomain/bin/gold_std_RUN.sh
+`172.25.49.139:/DiffDomain/bin/gold_std_RUN.sh`
+
 
 ```
 conda acitvate python27
@@ -20,7 +21,11 @@ bash gold_std_RUN.sh
 
 ## Where can we find the matrix that saved ?
 
-172.25.49.139:/lanec3_home/zhangx/diffDomain/data/MatrixFromHic/
+`172.25.49.139:/lanec3_home/zhangx/diffDomain/data/gold_std_MatrixFromHic/`
+> This is what we get from the function `contact_matrix_from_hic`
+
+`172.25.49.139:/lanec3_home/zhangx/diffDomain/data/gold_std_NormDiffMat/`
+> This is waht we get after funtion `normDiffbyMeanSD`
 
 
 

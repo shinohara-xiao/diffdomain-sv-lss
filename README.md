@@ -4,10 +4,19 @@
 
 [Integral_website2](https://www.notion.so/integral-calculate-fe573ec506154e6a83f9b24b208b2e54?pvs=4#d25b7f0bb63d438da635e7826864bc00)
 
-## Python Enviornment for LSS-test  -  and here is where we save the mat0 and mat1:
+## Python Enviornment for LSS-test  
+> and here is where we save the mat0 and mat1:
 
 172.25.49.139:/DiffDomain/bin/diffdomains.py
+
 172.25.49.139:/DiffDomain/bin/comparedomains/domians.py
+
+172.25.49.139:/DiffDomain/bin/gold_std_RUN.sh
+
+```
+conda acitvate python27
+bash gold_std_RUN.sh
+```
 
 ## What can we find the matrix that saved ?
 

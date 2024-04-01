@@ -8,18 +8,19 @@
 ### Python Enviornment for LSS-test  
 > and here is where we save the mat0 and mat1:
 
-`172.25.49.139:/DiffDomain/bin/diffdomains.py`
-
-`172.25.49.139:/DiffDomain/bin/comparedomains/domians.py`
-
-`172.25.49.139:/DiffDomain/bin/gold_std_RUN.sh`
-
 
 ```
 cd DiffDomain/bin
 conda acitvate python27
 bash gold_std_RUN.sh
 ```
+
+`172.25.49.139:/DiffDomain/bin/diffdomains.py`
+
+`172.25.49.139:/DiffDomain/bin/comparedomains/domians.py`
+
+`172.25.49.139:/DiffDomain/bin/gold_std_RUN.sh`
+
 
 ### Where can we find the matrix that saved ?
 

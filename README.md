@@ -18,7 +18,7 @@ conda acitvate python27
 bash gold_std_RUN.sh
 ```
 
-## What can we find the matrix that saved ?
+## Where can we find the matrix that saved ?
 
 172.25.49.139:/lanec3_home/zhangx/diffDomain/data/MatrixFromHic/
 

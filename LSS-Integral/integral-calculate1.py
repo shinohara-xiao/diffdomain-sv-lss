@@ -39,3 +39,10 @@ q = lambda x, y : 0
 r = lambda x, y : 1 - x - 2 * y 
 v, err = integrate.tplquad(f, 0, 1, g, h, q, r)  # g,h,q,r 分别是一重和二重积分的上下限
 print(v)
+
+import numpy as np
+from scipy import integrate
+import math as math
+def f(x,t):
+    return ((4*(math.pi**2)**-1) * f(x,t)
+v, err = integrate.dplauad(f,-2,2,-2,2)

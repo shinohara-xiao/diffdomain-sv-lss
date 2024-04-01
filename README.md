@@ -16,6 +16,7 @@
 
 
 ```
+cd DiffDomain/bin
 conda acitvate python27
 bash gold_std_RUN.sh
 ```

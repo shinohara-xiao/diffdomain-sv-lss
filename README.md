@@ -33,8 +33,9 @@ bash gold_std_RUN.sh
  # LSS and SV test - waiting - maybe not
 
  ```
+172.25.49.139:~diffDomain/diffdomain-py3
 cd diffDomain/diffdomain-py3
 less utils_lss.py
  ```
- 
+
 

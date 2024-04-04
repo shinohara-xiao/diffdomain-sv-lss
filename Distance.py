@@ -127,3 +127,117 @@ def CreateExcel(condition1,condition2,method_change):
     #merge_df.loc[index_to_delete,columns_to_delete] = None
 
     return merge_df
+
+#file_path = '/lanec2_home/zhangx/svs/data/Summary_of_sv_tads.xlsx'
+method_change = 'to1'
+
+#with pd.ExcelWriter(file_path) as writer:
+condition1,condition2 = 'GM12878', 'K562'
+data = CreateExcel(condition1,condition2,method_change)
+#print(data[data['region'] == '17:26897018-27272018'])
+data.to_csv('/lanec2_home/zhangx/svs/data/K562_summary.csv')
+
+condition1,condition2 = 'NHA', 'DIPG007'
+data = CreateExcel(condition1,condition2,method_change)
+data.to_csv('/lanec2_home/zhangx/svs/data/DIPG007_summary.csv')
+
+condition1,condition2 = 'NHA', 'DIPGXIII'
+data = CreateExcel(condition1,condition2,method_change)
+data.to_csv('/lanec2_home/zhangx/svs/data/DIPGXIII_summary.csv')
+
+# ------ 计算tads 与 sv 之间是否有overlap ----- #
+
+def generate_region(svregion,tadsregion,svtype,K):
+    # svregion and tadsregion format should be : [chr:start-end]
+    #sv_start, sv_end = svdataset['start'], svdataset['end']
+    # 定义sv的影响区域
+    sv_start = int(svregion.split('-')[0].split(':')[1])
+    sv_end = int(svregion.split('-')[1])
+
+    tad_start = int(tadsregion.split('-')[0].split(':')[1])
+    tad_end = int(tadsregion.split('-')[1])
+    #svtype = 
+
+    ltad = tad_end - tad_start
+    if svtype == '+-':  #deletion
+        k = K
+        arm = k*(sv_end-sv_start)
+        x1, x2 = sv_start - arm, sv_start
+        y1, y2 = sv_end,  sv_end + arm
+    elif svtype == '-+':   # duplication
+        k = K
+        arm = k*(sv_end-sv_start)
+        x1, x2= sv_start, sv_start + arm
+        y1, y2 = sv_end - arm, sv_end
+    elif svtype == '++':  # '++'
+        k = K
+        arm = k*(sv_end-sv_start)
+        x1, x2 = sv_start, sv_start+arm
+        y1, y2 = sv_end, sv_end + arm
+    else : # "--"
+        k = K
+        arm = k*(sv_end-sv_start)
+        x1, x2 = sv_start -arm,  sv_start
+        y1, y2 = sv_end - arm,  sv_end
+    sv_row = (x1,x2)
+    sv_col = (y1,y2)
+    tad_row = (tad_start,tad_start+ltad)
+    tad_col = (tad_end-ltad,tad_end)
+    return sv_row,sv_col,tad_row,tad_col
+
+def are_intersecting(seg1,seg2):
+    x1_seg1, x2_seg1 = seg1
+    x1_seg2, x2_seg2 = seg2
+
+    # 确保seg1的左端点在seg2的左侧
+    if x1_seg1 > x2_seg1:
+        x1_seg1, x2_seg1 = x2_seg1, x1_seg1
+    # 确保seg2的左端点在seg1的左侧
+    if x1_seg2 > x2_seg2:
+        x1_seg2, x2_seg2 = x2_seg2, x1_seg2
+    # 判断是否有重叠
+    if x2_seg1 >= x1_seg2 and x1_seg1 <= x2_seg2:
+        return True
+    return False
+
+def Caldistance(celltype,Kvalue):
+    #tads = pd.read_table(f'/lanec2_home/zhangx/DiffCompare/result/{condition1}_vs_{condition2}_10000_to1_f1b5_BH.txt')
+    #svs = pd.read_table(f'/lanec2_home/zhangx/DiffCompare/result/{condition2}_sv_{svtype}.bed',header = None)
+    #svs = svs.rename(columns={0:'chr',1:'start',2:'end'})
+
+    #file_path = '/lanec2_home/zhangx/svs/data/Summary_of_sv_tads.xlsx'
+    #data = pd.read_excel(file_path,sheet_name=celltype)
+
+    data = pd.read_csv(f'/lanec2_home/zhangx/svs/data/{celltype}_summary.csv')
+    overlap = []
+    for i in range(data.shape[0]):
+        sg = data['region'][i]
+        tg = data['related_tads'][i]
+        st = data['type'][i]
+        sv_row,sv_col,tad_row,tad_col = generate_region(svregion=sg, tadsregion=tg,svtype = st,K = Kvalue)
+        if are_intersecting(sv_row,tad_row) and are_intersecting(sv_col,tad_col):
+            overlap.append('yes')
+        else:
+            overlap.append('no')
+    data['overlap'] = overlap
+    #print(data[data['region'] == '17:26897018-27272018'])
+
+    # 删除重复的region避免数据过于冗余
+    index_to_delete = data[data.duplicated(subset='region')].index
+    columns_to_delete = ['chr1','breakpoint1','breakpoint2','region','type','retads_related_raw','retads_related_to1']
+    data.loc[index_to_delete,columns_to_delete] = None
+    return data
+
+
+# ---------------- USE Function and CODEs ---------------- #
+
+#distance_path = '/lanec2_home/zhangx/svs/data/Summary_distance.xlsx'
+#with pd.ExcelWriter(distance_path) as writer:
+data = Caldistance('K562',Kvalue=0.7)
+data.to_csv('/lanec2_home/zhangx/svs/data/K562_distance.csv',index = False)
+
+data = Caldistance('DIPG007',Kvalue = 0.7)
+data.to_csv('/lanec2_home/zhangx/svs/data/DIPG007_distance.csv',index = False)
+
+data = Caldistance('DIPGXIII',Kvalue = 0.7)
+data.to_csv('/lanec2_home/zhangx/svs/data/DIPGXIII_distance.csv',index = False)
